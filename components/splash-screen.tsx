@@ -1,40 +1,51 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Image from "next/image"
-import { useMobile } from "@/hooks/use-mobile"
-import { useTheme } from "next-themes"
+import type React from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { useMobile } from "@/hooks/use-mobile";
+import { useTheme } from "next-themes";
 
-export default function SplashScreen({ children }: { children: React.ReactNode }) {
-  const [showSplash, setShowSplash] = useState(true)
-  const [mounted, setMounted] = useState(false)
-  const isMobile = useMobile()
-  const { resolvedTheme } = useTheme()
+export default function SplashScreen({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [showSplash, setShowSplash] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const isMobile = useMobile();
+  const { resolvedTheme } = useTheme();
 
   // Handle hydration
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted) return;
 
-    // Always show splash screen initially, even on desktop
-    const timer = setTimeout(() => {
-      setShowSplash(false)
-      // Store that user has visited before
-      if (typeof window !== "undefined") {
-        localStorage.setItem("hasVisitedBefore", "true")
-      }
-    }, 2500)
+    // Check if user has visited before
+    const hasVisitedBefore =
+      localStorage.getItem("hasVisitedBefore") === "true";
 
-    return () => clearTimeout(timer)
-  }, [mounted])
+    // Only show splash if it's mobile and first visit
+    if (isMobile && !hasVisitedBefore) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+        // Store that user has visited before
+        localStorage.setItem("hasVisitedBefore", "true");
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    } else {
+      // Don't show splash for desktop or returning visitors
+      setShowSplash(false);
+    }
+  }, [mounted, isMobile]);
 
   // Determine if dark mode is active
-  const isDark = mounted && resolvedTheme === "dark"
+  const isDark = mounted && resolvedTheme === "dark";
 
   return (
     <>
@@ -56,11 +67,19 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
               className="flex flex-col items-center"
             >
               <div className="relative w-32 h-32 mb-6">
-                <Image src="/signature-logo.png" alt="Signature Fitness" fill className="object-contain" priority />
+                <Image
+                  src="/signature-logo.png"
+                  alt="Signature Fitness"
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
 
               <motion.h1
-                className={`text-2xl font-bold mb-8 ${isDark ? "text-white" : "text-gray-900"}`}
+                className={`text-2xl font-bold mb-8 ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
@@ -74,18 +93,31 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                 transition={{ delay: 0.6, duration: 0.5 }}
                 className="flex space-x-2"
               >
-                <div className="w-2 h-2 bg-gold-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <div className="w-2 h-2 bg-gold-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <div className="w-2 h-2 bg-gold-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <div
+                  className="w-2 h-2 bg-gold-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-gold-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                />
+                <div
+                  className="w-2 h-2 bg-gold-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                />
               </motion.div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: showSplash ? 0 : 1 }} transition={{ duration: 0.5 }}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showSplash ? 0 : 1 }}
+        transition={{ duration: 0.5 }}
+      >
         {children}
       </motion.div>
     </>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-import HeroCarousel from "@/components/hero-carousel"
-import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
-import { ThemeToggle } from "@/components/theme-toggle"
-import WelcomeSection from "@/components/welcome-section"
-import GymEquipmentSection from "@/components/gym-equipment-section"
-import MembershipPackages from "@/components/membership-packages"
-import StudioServicesSection from "@/components/studio-services-section"
-import StudioPackages from "@/components/studio-packages"
-import DigitalAccessSection from "@/components/digital-access-section"
-import InstallPWAButton from "@/components/install-pwa-button"
+import HeroCarousel from "@/components/hero-carousel";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import { ThemeToggle } from "@/components/theme-toggle";
+import WelcomeSection from "@/components/welcome-section";
+import GymEquipmentSection from "@/components/gym-equipment-section";
+import MembershipPackages from "@/components/membership-packages";
+import StudioServicesSection from "@/components/studio-services-section";
+import StudioPackages from "@/components/studio-packages";
+import DigitalAccessSection from "@/components/digital-access-section";
+import InstallPWAButton from "@/components/install-pwa-button";
 
 export default function Home() {
   return (
@@ -27,5 +27,5 @@ export default function Home() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }
