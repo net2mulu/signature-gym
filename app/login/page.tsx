@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { useTheme } from "next-themes"
-import { Eye, EyeOff, ArrowLeft } from "lucide-react"
-import { Facebook, Twitter } from "lucide-react"
-import { TikTok } from "@/components/icons/tiktok"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useTheme } from "next-themes";
+import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Facebook, Twitter } from "lucide-react";
+import { TikTok } from "@/components/icons/tiktok";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const { theme } = useTheme()
-  const isLightMode = theme === "light"
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useTheme();
+  const isLightMode = theme === "light";
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     // Simulate authentication
     setTimeout(() => {
-      setIsLoading(false)
+      setIsLoading(false);
       // Redirect to dashboard or home after successful login
-      window.location.href = "/"
-    }, 1500)
-  }
+      window.location.href = "/";
+    }, 1500);
+  };
 
   return (
     <div className="flex min-h-screen bg-black">
       {/* Left side - Image */}
       <div className="hidden md:flex md:w-1/2 relative">
         <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Mxv2qXilQ22K6e9zvtJ9slaKHCySP2.png"
+          src="/auth-bg.png"
           alt="Signature Fitness"
           fill
           className="object-cover"
@@ -54,7 +54,10 @@ export default function LoginPage() {
       {/* Right side - Login Form */}
       <div className="w-full md:w-1/2 flex flex-col p-8 md:p-12">
         <div className="flex items-center mb-8">
-          <Link href="/" className="flex items-center text-white hover:text-signature-gold transition-colors">
+          <Link
+            href="/"
+            className="flex items-center text-white hover:text-signature-gold transition-colors"
+          >
             <ArrowLeft size={20} className="mr-2" />
             <span>Back to Home</span>
           </Link>
@@ -63,15 +66,26 @@ export default function LoginPage() {
         <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
           {/* Mobile logo */}
           <div className="md:hidden flex justify-center mb-8">
-            <Image src="/signature-logo.png" alt="Signature Fitness" width={80} height={80} className="h-20 w-20" />
+            <Image
+              src="/signature-logo.png"
+              alt="Signature Fitness"
+              width={80}
+              height={80}
+              className="h-20 w-20"
+            />
           </div>
 
           <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-          <p className="text-gray-400 mb-8">Sign in to your account to continue</p>
+          <p className="text-gray-400 mb-8">
+            Sign in to your account to continue
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-300 mb-1"
+              >
                 Email Address
               </label>
               <input
@@ -86,7 +100,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-300 mb-1"
+              >
                 Password
               </label>
               <div className="relative">
@@ -117,12 +134,18 @@ export default function LoginPage() {
                   type="checkbox"
                   className="h-4 w-4 rounded border-gray-700 bg-gray-900 text-signature-gold focus:ring-signature-gold"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-300"
+                >
                   Remember me
                 </label>
               </div>
               <div className="text-sm">
-                <Link href="/forgot-password" className="text-signature-gold hover:text-signature-gold/80">
+                <Link
+                  href="/forgot-password"
+                  className="text-signature-gold hover:text-signature-gold/80"
+                >
                   Forgot password?
                 </Link>
               </div>
@@ -143,7 +166,9 @@ export default function LoginPage() {
                 <div className="w-full border-t border-gray-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-black text-gray-400">Or continue with</span>
+                <span className="px-2 bg-black text-gray-400">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -171,12 +196,15 @@ export default function LoginPage() {
 
           <p className="mt-8 text-center text-sm text-gray-400">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-signature-gold hover:text-signature-gold/80 font-medium">
+            <Link
+              href="/signup"
+              className="text-signature-gold hover:text-signature-gold/80 font-medium"
+            >
               Sign up
             </Link>
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

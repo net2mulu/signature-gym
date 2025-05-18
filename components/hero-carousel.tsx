@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence, type PanInfo } from "framer-motion"
-import Link from "next/link"
-import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useMobile } from "@/hooks/use-mobile"
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useMobile } from "@/hooks/use-mobile";
 
 // Carousel slides data
 const slides = [
@@ -14,7 +14,7 @@ const slides = [
     title: "SIGNATURE STRENGTH",
     subtitle: "SIGNATURE YOU.",
     description: "UNLOCK YOUR FULL POTENTIAL AT SIGNATURE FITNESS.",
-    image: "/placeholder-bl8x7.png",
+    image: "1.png",
     buttonText: "JOIN NOW",
     buttonLink: "/join",
   },
@@ -23,7 +23,7 @@ const slides = [
     title: "TRAIN SMARTER",
     subtitle: "LIVE BETTER.",
     description: "ACCESS PREMIUM EQUIPMENT AND EXPERT TRAINERS.",
-    image: "/placeholder-brxoq.png",
+    image: "2.png",
     buttonText: "VIEW PLANS",
     buttonLink: "/plans",
   },
@@ -32,49 +32,54 @@ const slides = [
     title: "COMMUNITY",
     subtitle: "COMMITMENT.",
     description: "JOIN A COMMUNITY OF LIKE-MINDED INDIVIDUALS.",
-    image: "/placeholder-rippj.png",
+    image: "3.png",
     buttonText: "EXPLORE",
     buttonLink: "/community",
   },
-]
+];
 
 export default function HeroCarousel() {
-  const [current, setCurrent] = useState(0)
-  const [autoplay, setAutoplay] = useState(true)
-  const constraintsRef = useRef(null)
-  const isMobile = useMobile()
+  const [current, setCurrent] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+  const constraintsRef = useRef(null);
+  const isMobile = useMobile();
 
   // Autoplay functionality
   useEffect(() => {
-    let interval: NodeJS.Timeout
+    let interval: NodeJS.Timeout;
 
     if (autoplay) {
       interval = setInterval(() => {
-        setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
-      }, 5000)
+        setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+      }, 5000);
     }
 
-    return () => clearInterval(interval)
-  }, [autoplay])
+    return () => clearInterval(interval);
+  }, [autoplay]);
 
   // Pause autoplay on interaction
-  const handleInteractionStart = () => setAutoplay(false)
-  const handleInteractionEnd = () => setAutoplay(true)
+  const handleInteractionStart = () => setAutoplay(false);
+  const handleInteractionEnd = () => setAutoplay(true);
 
   // Manual navigation
-  const goToSlide = (index: number) => setCurrent(index)
-  const nextSlide = () => setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
-  const prevSlide = () => setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
+  const goToSlide = (index: number) => setCurrent(index);
+  const nextSlide = () =>
+    setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  const prevSlide = () =>
+    setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
   // Handle swipe gestures
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = (
+    event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
     if (info.offset.x > 50) {
-      prevSlide()
+      prevSlide();
     } else if (info.offset.x < -50) {
-      nextSlide()
+      nextSlide();
     }
-    handleInteractionEnd()
-  }
+    handleInteractionEnd();
+  };
 
   if (isMobile) {
     // Mobile app-style banner carousel
@@ -113,8 +118,12 @@ export default function HeroCarousel() {
                   <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 dark:from-black/70 dark:to-black/30" />
 
                   <div className="absolute inset-0 flex flex-col justify-center p-4">
-                    <h2 className="text-xl font-bold text-white mb-1">{slides[current].title}</h2>
-                    <p className="text-sm text-gray-200 mb-3 line-clamp-2">{slides[current].description}</p>
+                    <h2 className="text-xl font-bold text-white mb-1">
+                      {slides[current].title}
+                    </h2>
+                    <p className="text-sm text-gray-200 mb-3 line-clamp-2">
+                      {slides[current].description}
+                    </p>
                     <Link
                       href={slides[current].buttonLink}
                       className="bg-gold-500 hover:bg-gold-600 text-white text-xs font-medium py-1.5 px-4 rounded-full w-fit transition-colors"
@@ -145,24 +154,38 @@ export default function HeroCarousel() {
         {/* Featured sections below carousel */}
         <div className="mt-6 grid grid-cols-2 gap-4">
           <div className="bg-gray-100 dark:bg-gray-900 rounded-xl p-4 shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Today's Classes</h3>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">Check out what's happening today</p>
-            <Link href="/classes" className="text-gold-600 dark:text-gold-400 text-sm font-medium flex items-center">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Today's Classes
+            </h3>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              Check out what's happening today
+            </p>
+            <Link
+              href="/classes"
+              className="text-gold-600 dark:text-gold-400 text-sm font-medium flex items-center"
+            >
               View Schedule
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
           <div className="bg-gray-100 dark:bg-gray-900 rounded-xl p-4 shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">My Progress</h3>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">Track your fitness journey</p>
-            <Link href="/progress" className="text-gold-600 dark:text-gold-400 text-sm font-medium flex items-center">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              My Progress
+            </h3>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              Track your fitness journey
+            </p>
+            <Link
+              href="/progress"
+              className="text-gold-600 dark:text-gold-400 text-sm font-medium flex items-center"
+            >
               View Stats
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   // Desktop version - full height hero with floating nav
@@ -244,12 +267,14 @@ export default function HeroCarousel() {
             key={index}
             onClick={() => goToSlide(index)}
             className={`w-3 h-3 rounded-full focus:outline-none transition-colors duration-300 ${
-              index === current ? "bg-gold-500" : "bg-white/50 hover:bg-white/80"
+              index === current
+                ? "bg-gold-500"
+                : "bg-white/50 hover:bg-white/80"
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
     </div>
-  )
+  );
 }
