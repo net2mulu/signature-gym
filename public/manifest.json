@@ -3,10 +3,16 @@
   "short_name": "Signature",
   "description": "Your premium gym management app",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#000000",
   "theme_color": "#BEA632",
   "orientation": "portrait",
+  "categories": ["fitness", "health", "lifestyle"],
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -54,7 +60,23 @@
       "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Home Screen of Signature Fitness"
+    },
+    {
+      "src": "/screenshots/classes.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Classes Screen of Signature Fitness"
     }
   ],
   "shortcuts": [
@@ -73,20 +95,10 @@
       "icons": [{ "src": "/icons/schedule.png", "sizes": "192x192" }]
     }
   ],
-  "screenshots": [
-    {
-      "src": "/screenshots/home.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "platform": "narrow",
-      "label": "Home Screen"
-    },
-    {
-      "src": "/screenshots/classes.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "platform": "narrow",
-      "label": "Classes Screen"
-    }
-  ]
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "handle_links": "preferred",
+  "scope": "/",
+  "dir": "ltr",
+  "lang": "en"
 }

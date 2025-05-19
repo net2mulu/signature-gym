@@ -1,45 +1,42 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Download } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useMobile } from "@/hooks/use-mobile";
+import { useState, useEffect } from "react"
+import { Download } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { useMobile } from "@/hooks/use-mobile"
 
 export default function InstallPWAButton() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const isMobile = useMobile();
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+  const [isInstallable, setIsInstallable] = useState(false)
+  const [isInstalled, setIsInstalled] = useState(false)
+  const [showTooltip, setShowTooltip] = useState(false)
+  const isMobile = useMobile()
 
   useEffect(() => {
     // Check if the app is already installed
-    if (
-      window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true
-    ) {
-      setIsInstalled(true);
-      return;
+    if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) {
+      setIsInstalled(true)
+      return
     }
 
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
-      e.preventDefault();
+      e.preventDefault()
       // Stash the event so it can be triggered later
-      setDeferredPrompt(e);
-      setIsInstallable(true);
+      setDeferredPrompt(e)
+      setIsInstallable(true)
 
       // Show tooltip after 3 seconds if the app is installable
       setTimeout(() => {
-        setShowTooltip(true);
-      }, 3000);
-    };
+        setShowTooltip(true)
+      }, 3000)
+    }
 
     const handleAppInstalled = () => {
-      setIsInstallable(false);
-      setIsInstalled(true);
-      setDeferredPrompt(null);
-      setShowTooltip(false);
+      setIsInstallable(false)
+      setIsInstalled(true)
+      setDeferredPrompt(null)
+      setShowTooltip(false)
 
       // Send analytics event
       if (typeof window !== "undefined" && "gtag" in window) {
@@ -47,60 +44,50 @@ export default function InstallPWAButton() {
         window.gtag("event", "app_installed", {
           event_category: "engagement",
           event_label: "PWA Installation",
-        });
+        })
       }
-    };
+    }
 
-    window.addEventListener(
-      "beforeinstallprompt",
-      handleBeforeInstallPrompt as EventListener
-    );
-    window.addEventListener("appinstalled", handleAppInstalled);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener)
+    window.addEventListener("appinstalled", handleAppInstalled)
 
     // Auto-hide tooltip after 10 seconds
     const tooltipTimer = setTimeout(() => {
-      setShowTooltip(false);
-    }, 10000);
+      setShowTooltip(false)
+    }, 10000)
 
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt as EventListener
-      );
-      window.removeEventListener("appinstalled", handleAppInstalled);
-      clearTimeout(tooltipTimer);
-    };
-  }, []);
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener)
+      window.removeEventListener("appinstalled", handleAppInstalled)
+      clearTimeout(tooltipTimer)
+    }
+  }, [])
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      return;
+      return
     }
 
     // Hide tooltip
-    setShowTooltip(false);
+    setShowTooltip(false)
 
     // Show the install prompt
-    deferredPrompt.prompt();
+    deferredPrompt.prompt()
 
     // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(
-      `User ${
-        outcome === "accepted" ? "accepted" : "dismissed"
-      } the install prompt`
-    );
+    const { outcome } = await deferredPrompt.userChoice
+    console.log(`User ${outcome === "accepted" ? "accepted" : "dismissed"} the install prompt`)
 
     // We've used the prompt, and can't use it again, throw it away
-    setDeferredPrompt(null);
+    setDeferredPrompt(null)
 
     if (outcome === "accepted") {
-      setIsInstallable(false);
+      setIsInstallable(false)
     }
-  };
+  }
 
   if (!isInstallable || isInstalled) {
-    return null;
+    return null
   }
 
   // Return both the floating button and the navbar button
@@ -148,5 +135,5 @@ export default function InstallPWAButton() {
         )}
       </AnimatePresence>
     </>
-  );
+  )
 }
