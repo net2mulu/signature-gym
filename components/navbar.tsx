@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Dumbbell, Activity, DollarSign, User, Download } from "lucide-react"
-import Image from "next/image"
-import { usePathname } from "next/navigation"
-import { useTheme } from "next-themes"
-import MenuPopup from "./menu-popup"
-import { DesktopThemeToggle } from "./theme-toggle"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Dumbbell, Activity, DollarSign, User, Download } from "lucide-react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import MenuPopup from "./menu-popup";
+import { DesktopThemeToggle } from "./theme-toggle";
 
 // Add this before the Navbar component
 // Extend the Window interface to include deferredPrompt
 declare global {
   interface Window {
-    deferredPrompt: any
+    deferredPrompt: any;
   }
 }
 
@@ -46,107 +46,139 @@ const subMenus = {
     { name: "Corporate Plans", href: "/pricing/corporate" },
     { name: "Special Offers", href: "/pricing/offers" },
   ],
-}
+};
 
 export default function Navbar() {
-  const [activeMenu, setActiveMenu] = useState<string | null>(null)
-  const [scrolled, setScrolled] = useState(false)
-  const pathname = usePathname()
-  const { theme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   // Update the navItems array to remove Reservation and add Profile for mobile
   const navItems = [
-    { name: "Gym", href: "/gym", icon: Dumbbell, key: "gym", position: "left" as const },
-    { name: "Studio", href: "/studio", icon: Activity, key: "studio", position: "left" as const },
-    { name: "Profile", href: "/profile", icon: User, key: "profile", position: "right" as const },
-    { name: "Pricing", href: "/pricing", icon: DollarSign, key: "pricing", position: "right" as const },
-  ]
+    {
+      name: "Gym",
+      href: "/gym",
+      icon: Dumbbell,
+      key: "gym",
+      position: "left" as const,
+    },
+    {
+      name: "Studio",
+      href: "/studio",
+      icon: Activity,
+      key: "studio",
+      position: "left" as const,
+    },
+    {
+      name: "Pricing",
+      href: "/pricing",
+      icon: DollarSign,
+      key: "pricing",
+      position: "right" as const,
+    },
+    {
+      name: "Profile",
+      href: "/signup",
+      icon: User,
+      key: "profile",
+      position: "right" as const,
+    },
+  ];
 
   // Desktop navigation items (without Profile)
   const desktopNavItems = [
     { name: "Gym", href: "/gym" },
     { name: "Studio", href: "/studio" },
     { name: "Pricing", href: "/pricing" },
-  ]
+  ];
 
   // Add this inside the Navbar component, after the state declarations
   // Handle PWA installation
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
-      e.preventDefault()
+      e.preventDefault();
       // Stash the event so it can be triggered later
-      window.deferredPrompt = e
-      console.log("Install prompt ready")
-    }
+      window.deferredPrompt = e;
+      console.log("Install prompt ready");
+    };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener)
+    window.addEventListener(
+      "beforeinstallprompt",
+      handleBeforeInstallPrompt as EventListener
+    );
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener)
-    }
-  }, [])
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt as EventListener
+      );
+    };
+  }, []);
 
   // Handle mounted state to avoid hydration mismatch
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 20
+      const isScrolled = window.scrollY > 20;
       if (isScrolled !== scrolled) {
-        setScrolled(isScrolled)
+        setScrolled(isScrolled);
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [scrolled])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrolled]);
 
   const handleMenuClick = (key: string) => {
-    setActiveMenu(activeMenu === key ? null : key)
-  }
+    setActiveMenu(activeMenu === key ? null : key);
+  };
 
   const closeMenu = () => {
-    setActiveMenu(null)
-  }
+    setActiveMenu(null);
+  };
 
   // Function to handle PWA installation
   const handleInstallClick = () => {
     try {
       if (window.deferredPrompt) {
         // Show the install prompt
-        window.deferredPrompt.prompt()
+        window.deferredPrompt.prompt();
 
         // Wait for the user to respond to the prompt
         window.deferredPrompt.userChoice
           .then((choiceResult) => {
             if (choiceResult.outcome === "accepted") {
-              console.log("User accepted the install prompt")
+              console.log("User accepted the install prompt");
             } else {
-              console.log("User dismissed the install prompt")
+              console.log("User dismissed the install prompt");
             }
             // Clear the saved prompt since it can't be used again
-            window.deferredPrompt = null
+            window.deferredPrompt = null;
           })
           .catch((err) => {
-            console.error("Install prompt error:", err)
-          })
+            console.error("Install prompt error:", err);
+          });
       } else {
-        console.log("Install prompt not available")
+        console.log("Install prompt not available");
         // Fallback for iOS or when prompt isn't available
-        alert("To install this app, add it to your home screen from your browser's menu")
+        alert(
+          "To install this app, add it to your home screen from your browser's menu"
+        );
       }
     } catch (error) {
-      console.error("Error showing install prompt:", error)
+      console.error("Error showing install prompt:", error);
     }
-  }
+  };
 
   // Determine if we're in light mode
-  const isLightMode = mounted && theme === "light"
+  const isLightMode = mounted && theme === "light";
 
   return (
     <>
@@ -159,8 +191,8 @@ export default function Navbar() {
                 ? "bg-white/95 border-signature-gold shadow-[0_0_15px_rgba(190,166,50,0.15)]"
                 : "bg-[#1D1D1D] border border-gray-800 shadow-lg"
               : isLightMode
-                ? "bg-white/80 border-signature-gold/50 backdrop-blur-md"
-                : "bg-[#1D1D1D]/70 border border-gray-800/50 backdrop-blur-md"
+              ? "bg-white/80 border-signature-gold/50 backdrop-blur-md"
+              : "bg-[#1D1D1D]/70 border border-gray-800/50 backdrop-blur-md"
           } rounded-full px-6 ${isLightMode ? "border" : ""}`}
         >
           <div className="flex items-center justify-between h-16">
@@ -174,7 +206,11 @@ export default function Navbar() {
                     height={40}
                     className="h-10 w-10"
                   />
-                  <span className={`ml-2 font-semibold text-lg ${isLightMode ? "text-gray-900" : "text-white"}`}>
+                  <span
+                    className={`ml-2 font-semibold text-lg ${
+                      isLightMode ? "text-gray-900" : "text-white"
+                    }`}
+                  >
                     Signature
                   </span>
                 </Link>
@@ -184,7 +220,7 @@ export default function Navbar() {
             {/* Update the desktop navigation items rendering to use desktopNavItems */}
             <div className="flex items-center space-x-4">
               {desktopNavItems.map((item) => {
-                const isActive = pathname.startsWith(item.href)
+                const isActive = pathname.startsWith(item.href);
                 return (
                   <Link
                     key={item.name}
@@ -195,13 +231,17 @@ export default function Navbar() {
                           ? "text-signature-gold font-semibold"
                           : "text-signature-gold font-semibold"
                         : isLightMode
-                          ? "text-gray-700 hover:text-signature-gold"
-                          : "text-gray-300 hover:text-signature-gold"
-                    } ${isActive ? "after:content-[''] after:absolute after:bottom-[-6px] after:left-0 after:w-full after:h-[2px] after:bg-signature-gold" : ""}`}
+                        ? "text-gray-700 hover:text-signature-gold"
+                        : "text-gray-300 hover:text-signature-gold"
+                    } ${
+                      isActive
+                        ? "after:content-[''] after:absolute after:bottom-[-6px] after:left-0 after:w-full after:h-[2px] after:bg-signature-gold"
+                        : ""
+                    }`}
                   >
                     {item.name}
                   </Link>
-                )
+                );
               })}
 
               <Link
@@ -225,12 +265,24 @@ export default function Navbar() {
       {/* Mobile header - with logo on the left and install button on right */}
       <div
         className={`fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 md:hidden transition-all duration-300 ${
-          isLightMode ? "bg-white border-b border-signature-gold/30" : "bg-[#1D1D1D] border-b border-gray-800"
+          isLightMode
+            ? "bg-white border-b border-signature-gold/30"
+            : "bg-[#1D1D1D] border-b border-gray-800"
         }`}
       >
         <Link href="/" className="flex items-center">
-          <Image src="/signature-logo.png" alt="Signature Fitness" width={36} height={36} className="h-9 w-9" />
-          <span className={`ml-2 font-semibold text-lg ${isLightMode ? "text-gray-900" : "text-white"}`}>
+          <Image
+            src="/signature-logo.png"
+            alt="Signature Fitness"
+            width={36}
+            height={36}
+            className="h-9 w-9"
+          />
+          <span
+            className={`ml-2 font-semibold text-lg ${
+              isLightMode ? "text-gray-900" : "text-white"
+            }`}
+          >
             Signature
           </span>
         </Link>
@@ -247,8 +299,8 @@ export default function Navbar() {
         <div className="grid grid-cols-4 h-16 relative">
           {/* Navigation items */}
           {navItems.map((item, index) => {
-            const Icon = item.icon
-            const isActive = pathname.startsWith(item.href)
+            const Icon = item.icon;
+            const isActive = pathname.startsWith(item.href);
 
             return (
               <Link
@@ -258,15 +310,17 @@ export default function Navbar() {
                   isActive
                     ? "text-signature-gold font-semibold"
                     : isLightMode
-                      ? "text-gray-600 hover:text-gray-900"
-                      : "text-gray-400 hover:text-white"
+                    ? "text-gray-600 hover:text-gray-900"
+                    : "text-gray-400 hover:text-white"
                 }`}
               >
                 <Icon className={`h-5 w-5 ${isActive ? "fill-current" : ""}`} />
                 <span className="text-xs">{item.name}</span>
-                {isActive && <div className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-signature-gold"></div>}
+                {isActive && (
+                  <div className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-signature-gold"></div>
+                )}
               </Link>
-            )
+            );
           })}
         </div>
       </nav>
@@ -281,16 +335,24 @@ export default function Navbar() {
                 ? "text-signature-gold"
                 : "text-signature-gold"
               : isLightMode
-                ? "text-gray-600"
-                : "text-gray-400"
+              ? "text-gray-600"
+              : "text-gray-400"
           }`}
         >
           <div
             className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-lg ${
-              isLightMode ? "bg-white border-2 border-signature-gold/50" : "bg-[#1D1D1D] border-2 border-gray-800"
+              isLightMode
+                ? "bg-white border-2 border-signature-gold/50"
+                : "bg-[#1D1D1D] border-2 border-gray-800"
             }`}
           >
-            <Image src="/signature-logo.png" alt="Signature Fitness" width={30} height={30} className="w-8 h-8" />
+            <Image
+              src="/signature-logo.png"
+              alt="Signature Fitness"
+              width={30}
+              height={30}
+              className="w-8 h-8"
+            />
           </div>
         </Link>
       </div>
@@ -320,5 +382,5 @@ export default function Navbar() {
         />
       ))}
     </>
-  )
+  );
 }

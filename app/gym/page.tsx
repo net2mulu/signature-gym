@@ -252,7 +252,7 @@ export default function GymPage() {
                   transition={{ duration: 0.3 }}
                 >
                   <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Qc2cfrOMEjtkPeVXAueaDnqjt7qUc2.png"
+                    src="3.png"
                     alt="Gym Interior"
                     fill
                     className="object-cover"

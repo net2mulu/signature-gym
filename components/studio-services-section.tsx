@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
-import Image from "next/image"
-import { useTheme } from "next-themes"
-import { motion, useInView } from "framer-motion"
-import { useMobile } from "@/hooks/use-mobile"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import { motion, useInView } from "framer-motion";
+import { useMobile } from "@/hooks/use-mobile";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 // Service data
 const studioServices = [
@@ -19,31 +19,33 @@ const studioServices = [
   {
     id: "yoga",
     title: "YOGA",
-    description: "FIND BALANCE AND FLEXIBILITY THROUGH MINDFUL MOVEMENT AND BREATH.",
+    description:
+      "FIND BALANCE AND FLEXIBILITY THROUGH MINDFUL MOVEMENT AND BREATH.",
     icon: "🧘‍♀️",
   },
   {
     id: "pilates",
     title: "PILATES",
-    description: "STRENGTHEN YOUR CORE AND IMPROVE POSTURE WITH CONTROLLED MOVEMENTS.",
+    description:
+      "STRENGTHEN YOUR CORE AND IMPROVE POSTURE WITH CONTROLLED MOVEMENTS.",
     icon: "💪",
   },
-]
+];
 
 export default function StudioServicesSection() {
-  const { theme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  const isMobile = useMobile()
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const isMobile = useMobile();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   // Handle mounted state to avoid hydration mismatch
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   // Determine if we're in light mode
-  const isLightMode = mounted && theme === "light"
+  const isLightMode = mounted && theme === "light";
 
   // Animation variants
   const containerVariants = {
@@ -55,7 +57,7 @@ export default function StudioServicesSection() {
         delayChildren: 0.2,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -64,7 +66,7 @@ export default function StudioServicesSection() {
       opacity: 1,
       transition: { duration: 0.6, ease: "easeOut" },
     },
-  }
+  };
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -76,15 +78,23 @@ export default function StudioServicesSection() {
         delay: 0.3 + i * 0.1,
       },
     }),
-  }
+  };
 
   // Mobile layout with app-like feel
   if (isMobile) {
     return (
       <section ref={ref} className="px-0 pt-6 pb-12 overflow-hidden">
         {/* App-like header with sticky behavior */}
-        <div className={`px-4 py-3 mb-4 ${isLightMode ? "bg-white" : "bg-[#1D1D1D]"}`}>
-          <h2 className={`text-xl font-bold ${isLightMode ? "text-gray-900" : "text-white"}`}>
+        <div
+          className={`px-4 py-3 mb-4 ${
+            isLightMode ? "bg-white" : "bg-[#1D1D1D]"
+          }`}
+        >
+          <h2
+            className={`text-xl font-bold ${
+              isLightMode ? "text-gray-900" : "text-white"
+            }`}
+          >
             SIGNATURE <span className="text-signature-gold">STUDIO</span>
           </h2>
         </div>
@@ -94,7 +104,7 @@ export default function StudioServicesSection() {
           {/* Background image */}
           <div className="relative w-full h-56">
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-sZ2VFQVQH54UxSMSJLXdmxuqf9fzeR.png"
+              src="/stu.png"
               alt="Signature Studio"
               fill
               className="object-cover"
@@ -121,9 +131,10 @@ export default function StudioServicesSection() {
               }`}
             >
               <p className="text-sm capitalize leading-relaxed">
-                OUR STUDIO IS DESIGNED TO CHALLENGE YOU IN NEW WAYS, OFFERING HIGH-ENERGY SESSIONS LED BY EXPERT
-                INSTRUCTORS. WHETHER YOU'RE INTO YOGA, PILATES, OR CYCLING, THERE'S A CLASS THAT MATCHES YOUR STYLE AND
-                PACE.
+                OUR STUDIO IS DESIGNED TO CHALLENGE YOU IN NEW WAYS, OFFERING
+                HIGH-ENERGY SESSIONS LED BY EXPERT INSTRUCTORS. WHETHER YOU'RE
+                INTO YOGA, PILATES, OR CYCLING, THERE'S A CLASS THAT MATCHES
+                YOUR STYLE AND PACE.
               </p>
               <div className="mt-4">
                 <Link
@@ -142,7 +153,13 @@ export default function StudioServicesSection() {
 
         {/* Service cards - outside the blur area */}
         <div className="px-4">
-          <h3 className={`text-lg font-bold mb-4 ${isLightMode ? "text-gray-900" : "text-white"}`}>OUR CLASSES</h3>
+          <h3
+            className={`text-lg font-bold mb-4 ${
+              isLightMode ? "text-gray-900" : "text-white"
+            }`}
+          >
+            OUR CLASSES
+          </h3>
           <div className="space-y-3 mb-6">
             {studioServices.map((service, index) => (
               <motion.div
@@ -152,15 +169,25 @@ export default function StudioServicesSection() {
                 animate={isInView ? "visible" : "hidden"}
                 variants={cardVariants}
                 className={`p-3 rounded-lg flex items-center ${
-                  isLightMode ? "bg-white shadow-sm border border-gray-100" : "bg-[#1D1D1D] border border-gray-800"
+                  isLightMode
+                    ? "bg-white shadow-sm border border-gray-100"
+                    : "bg-[#1D1D1D] border border-gray-800"
                 }`}
               >
                 <span className="text-2xl mr-3">{service.icon}</span>
                 <div>
-                  <h4 className={`font-bold text-sm ${isLightMode ? "text-gray-900" : "text-white"}`}>
+                  <h4
+                    className={`font-bold text-sm ${
+                      isLightMode ? "text-gray-900" : "text-white"
+                    }`}
+                  >
                     {service.title}
                   </h4>
-                  <p className={`text-xs mt-1 ${isLightMode ? "text-gray-700" : "text-gray-300"}`}>
+                  <p
+                    className={`text-xs mt-1 ${
+                      isLightMode ? "text-gray-700" : "text-gray-300"
+                    }`}
+                  >
                     {service.description}
                   </p>
                 </div>
@@ -189,12 +216,17 @@ export default function StudioServicesSection() {
           </motion.div>
         </div>
       </section>
-    )
+    );
   }
 
   // Desktop layout
   return (
-    <section ref={ref} className={`py-24 overflow-hidden ${isLightMode ? "bg-gray-100" : "bg-[#1D1D1D]/50"}`}>
+    <section
+      ref={ref}
+      className={`py-24 overflow-hidden ${
+        isLightMode ? "bg-gray-100" : "bg-[#1D1D1D]/50"
+      }`}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="relative">
           {/* Background Image */}
@@ -218,7 +250,9 @@ export default function StudioServicesSection() {
               >
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                  }
                   transition={{ duration: 0.5 }}
                   className={`text-4xl md:text-5xl font-bold tracking-tight leading-tight ${
                     isLightMode ? "text-gray-900" : "text-white"
@@ -230,19 +264,24 @@ export default function StudioServicesSection() {
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                  }
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className={`mt-6 text-base md:text-lg leading-relaxed ${
                     isLightMode ? "text-gray-800" : "text-gray-300"
                   }`}
                 >
-                  OUR STUDIO IS DESIGNED TO CHALLENGE YOU IN NEW WAYS, OFFERING HIGH-ENERGY SESSIONS LED BY EXPERT
-                  INSTRUCTORS. WHETHER YOU'RE INTO YOGA, PILATES, OR CYCLING, THERE'S A CLASS THAT MATCHES YOUR STYLE
-                  AND PACE.
+                  OUR STUDIO IS DESIGNED TO CHALLENGE YOU IN NEW WAYS, OFFERING
+                  HIGH-ENERGY SESSIONS LED BY EXPERT INSTRUCTORS. WHETHER YOU'RE
+                  INTO YOGA, PILATES, OR CYCLING, THERE'S A CLASS THAT MATCHES
+                  YOUR STYLE AND PACE.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                  }
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="mt-8"
                 >
@@ -284,18 +323,32 @@ export default function StudioServicesSection() {
                 animate={isInView ? "visible" : "hidden"}
                 variants={cardVariants}
                 className={`p-6 rounded-lg ${
-                  isLightMode ? "bg-white shadow-md border border-gray-100" : "bg-[#1D1D1D] border border-gray-800"
+                  isLightMode
+                    ? "bg-white shadow-md border border-gray-100"
+                    : "bg-[#1D1D1D] border border-gray-800"
                 }`}
               >
                 <span className="text-4xl block mb-4">{service.icon}</span>
-                <h4 className={`font-bold text-xl mb-2 ${isLightMode ? "text-gray-900" : "text-white"}`}>
+                <h4
+                  className={`font-bold text-xl mb-2 ${
+                    isLightMode ? "text-gray-900" : "text-white"
+                  }`}
+                >
                   {service.title}
                 </h4>
-                <p className={`mb-4 ${isLightMode ? "text-gray-700" : "text-gray-300"}`}>{service.description}</p>
+                <p
+                  className={`mb-4 ${
+                    isLightMode ? "text-gray-700" : "text-gray-300"
+                  }`}
+                >
+                  {service.description}
+                </p>
                 <Link
                   href={`/studio/${service.id}`}
                   className={`inline-flex items-center text-sm font-medium ${
-                    isLightMode ? "text-gray-900 hover:text-signature-gold" : "text-white hover:text-signature-gold"
+                    isLightMode
+                      ? "text-gray-900 hover:text-signature-gold"
+                      : "text-white hover:text-signature-gold"
                   } transition-colors`}
                 >
                   LEARN MORE
@@ -307,5 +360,5 @@ export default function StudioServicesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -839,7 +839,7 @@ export default function StudioPage() {
                             }}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: j * 0.1 }}
+                            // transition={{ delay: j * 0.1 }}
                           >
                             <div>
                               <p
