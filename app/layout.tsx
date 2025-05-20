@@ -5,6 +5,7 @@ import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import SplashScreen from "@/components/splash-screen"
 import Script from "next/script"
+import AuthProvider from "@/components/auth-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -93,18 +94,20 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
-        <link rel="mask-icon" href="/icons/safari-pinned-tab.png" color="#BEA632" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/app-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/app-icon.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/app-icon.png" />
+        <link rel="mask-icon" href="/icons/app-icon.png" color="#BEA632" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="theme-color" content="#BEA632" />
       </head>
       <body className={`${inter.className} flex flex-col min-h-screen`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <SplashScreen>{children}</SplashScreen>
-        </ThemeProvider>
-        <Script src="/register-sw.js" strategy="lazyOnload" />
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            <SplashScreen>{children}</SplashScreen>
+          </ThemeProvider>
+        </AuthProvider>
+        <Script src="/register-sw.js" strategy="afterInteractive" />
       </body>
     </html>
   )

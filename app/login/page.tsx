@@ -9,6 +9,7 @@ import { useTheme } from "next-themes"
 import { Eye, EyeOff, ArrowLeft } from "lucide-react"
 import { Facebook, Twitter } from "lucide-react"
 import { TikTok } from "@/components/icons/tiktok"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -16,7 +17,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
-  const isLightMode = theme === "light"
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,7 +27,7 @@ export default function LoginPage() {
     setTimeout(() => {
       setIsLoading(false)
       // Redirect to dashboard or home after successful login
-      window.location.href = "/"
+      router.push("/")
     }, 1500)
   }
 
@@ -34,13 +35,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen bg-black">
       {/* Left side - Image */}
       <div className="hidden md:flex md:w-1/2 relative">
-        <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Mxv2qXilQ22K6e9zvtJ9slaKHCySP2.png"
-          alt="Signature Fitness"
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src="/auth-background.jpg" alt="Signature Fitness" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute bottom-10 left-10">
           <h1 className="text-5xl font-bold text-signature-gold">

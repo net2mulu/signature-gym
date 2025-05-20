@@ -7,6 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useTheme } from "next-themes"
 import { Eye, EyeOff, ArrowLeft, ChevronDown } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [agreeToTerms, setAgreeToTerms] = useState(false)
   const { theme } = useTheme()
-  const isLightMode = theme === "light"
+  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -42,7 +43,7 @@ export default function SignupPage() {
     setTimeout(() => {
       setIsLoading(false)
       // Redirect to payment page after successful registration
-      window.location.href = "/payment"
+      router.push("/payment")
     }, 1500)
   }
 
@@ -50,13 +51,7 @@ export default function SignupPage() {
     <div className="flex min-h-screen bg-black">
       {/* Left side - Image */}
       <div className="hidden md:flex md:w-1/2 relative">
-        <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Mxv2qXilQ22K6e9zvtJ9slaKHCySP2.png"
-          alt="Signature Fitness"
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src="/auth-background.jpg" alt="Signature Fitness" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute bottom-10 left-10">
           <h1 className="text-5xl font-bold text-signature-gold">
@@ -146,13 +141,7 @@ export default function SignupPage() {
                     className="flex items-center justify-between h-full px-3 py-3 bg-gray-900 border border-gray-700 rounded-l-lg text-white"
                   >
                     <div className="flex items-center">
-                      <Image
-                        src="https://placeholder.svg?height=20&width=30&query=ethiopia+flag"
-                        alt="Ethiopia"
-                        width={30}
-                        height={20}
-                        className="mr-2"
-                      />
+                      <Image src="/flags/ethiopia-flag.png" alt="Ethiopia" width={30} height={20} className="mr-2" />
                       <ChevronDown size={16} />
                     </div>
                   </button>

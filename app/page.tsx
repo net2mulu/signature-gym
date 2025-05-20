@@ -9,7 +9,6 @@ import StudioServicesSection from "@/components/studio-services-section"
 import StudioPackages from "@/components/studio-packages"
 import DigitalAccessSection from "@/components/digital-access-section"
 import OfflineIndicator from "@/components/offline-indicator"
-import InstallPrompt from "@/components/install-prompt"
 
 export default function Home() {
   return (
@@ -17,7 +16,6 @@ export default function Home() {
       <Navbar />
       <ThemeToggle />
       <OfflineIndicator />
-      <InstallPrompt />
       <main className="flex-grow pb-16 md:pb-0">
         <HeroCarousel />
         <WelcomeSection />

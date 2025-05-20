@@ -30,13 +30,7 @@ export default function ForgotPasswordPage() {
     <div className="flex min-h-screen bg-black">
       {/* Left side - Image */}
       <div className="hidden md:flex md:w-1/2 relative">
-        <Image
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Mxv2qXilQ22K6e9zvtJ9slaKHCySP2.png"
-          alt="Signature Fitness"
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src="/auth-background.jpg" alt="Signature Fitness" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute bottom-10 left-10">
           <h1 className="text-5xl font-bold text-signature-gold">

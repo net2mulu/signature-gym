@@ -2,15 +2,22 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Dumbbell, Video, Calendar, DollarSign, User } from "lucide-react"
+import { Dumbbell, Activity, DollarSign, User, Download } from "lucide-react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
 import MenuPopup from "./menu-popup"
 import { DesktopThemeToggle } from "./theme-toggle"
-import PWAInstallButton from "./pwa-install-button"
 
-// Define submenu items for each main navigation item
+// Add this before the Navbar component
+// Extend the Window interface to include deferredPrompt
+declare global {
+  interface Window {
+    deferredPrompt: any
+  }
+}
+
+// Update the subMenus object to remove reservation and add profile
 const subMenus = {
   gym: [
     { name: "Equipment", href: "/gym/equipment" },
@@ -26,11 +33,11 @@ const subMenus = {
     { name: "HIIT", href: "/studio/hiit" },
     { name: "Spinning", href: "/studio/spinning" },
   ],
-  reservation: [
-    { name: "Book a Class", href: "/reservation/class" },
-    { name: "Book Equipment", href: "/reservation/equipment" },
-    { name: "Personal Trainer", href: "/reservation/trainer" },
-    { name: "My Bookings", href: "/reservation/my-bookings" },
+  profile: [
+    { name: "My Account", href: "/profile/account" },
+    { name: "My Bookings", href: "/profile/bookings" },
+    { name: "Settings", href: "/profile/settings" },
+    { name: "Help", href: "/profile/help" },
   ],
   pricing: [
     { name: "Membership Plans", href: "/pricing/plans" },
@@ -47,6 +54,39 @@ export default function Navbar() {
   const pathname = usePathname()
   const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
+
+  // Update the navItems array to remove Reservation and add Profile for mobile
+  const navItems = [
+    { name: "Gym", href: "/gym", icon: Dumbbell, key: "gym", position: "left" as const },
+    { name: "Studio", href: "/studio", icon: Activity, key: "studio", position: "left" as const },
+    { name: "Profile", href: "/profile", icon: User, key: "profile", position: "right" as const },
+    { name: "Pricing", href: "/pricing", icon: DollarSign, key: "pricing", position: "right" as const },
+  ]
+
+  // Desktop navigation items (without Profile)
+  const desktopNavItems = [
+    { name: "Gym", href: "/gym" },
+    { name: "Studio", href: "/studio" },
+    { name: "Pricing", href: "/pricing" },
+  ]
+
+  // Add this inside the Navbar component, after the state declarations
+  // Handle PWA installation
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault()
+      // Stash the event so it can be triggered later
+      window.deferredPrompt = e
+      console.log("Install prompt ready")
+    }
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener)
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt as EventListener)
+    }
+  }, [])
 
   // Handle mounted state to avoid hydration mismatch
   useEffect(() => {
@@ -66,19 +106,43 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [scrolled])
 
-  const navItems = [
-    { name: "Gym", href: "/gym", icon: Dumbbell, key: "gym", position: "left" as const },
-    { name: "Studio", href: "/studio", icon: Video, key: "studio", position: "left" as const },
-    { name: "Reservation", href: "/reservation", icon: Calendar, key: "reservation", position: "right" as const },
-    { name: "Pricing", href: "/pricing", icon: DollarSign, key: "pricing", position: "right" as const },
-  ]
-
   const handleMenuClick = (key: string) => {
     setActiveMenu(activeMenu === key ? null : key)
   }
 
   const closeMenu = () => {
     setActiveMenu(null)
+  }
+
+  // Function to handle PWA installation
+  const handleInstallClick = () => {
+    try {
+      if (window.deferredPrompt) {
+        // Show the install prompt
+        window.deferredPrompt.prompt()
+
+        // Wait for the user to respond to the prompt
+        window.deferredPrompt.userChoice
+          .then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User accepted the install prompt")
+            } else {
+              console.log("User dismissed the install prompt")
+            }
+            // Clear the saved prompt since it can't be used again
+            window.deferredPrompt = null
+          })
+          .catch((err) => {
+            console.error("Install prompt error:", err)
+          })
+      } else {
+        console.log("Install prompt not available")
+        // Fallback for iOS or when prompt isn't available
+        alert("To install this app, add it to your home screen from your browser's menu")
+      }
+    } catch (error) {
+      console.error("Error showing install prompt:", error)
+    }
   }
 
   // Determine if we're in light mode
@@ -93,10 +157,10 @@ export default function Navbar() {
             scrolled
               ? isLightMode
                 ? "bg-white/95 border-signature-gold shadow-[0_0_15px_rgba(190,166,50,0.15)]"
-                : "bg-[#1D1D1D] shadow-lg"
+                : "bg-[#1D1D1D] border border-gray-800 shadow-lg"
               : isLightMode
                 ? "bg-white/80 border-signature-gold/50 backdrop-blur-md"
-                : "bg-[#1D1D1D]/70 backdrop-blur-md"
+                : "bg-[#1D1D1D]/70 border border-gray-800/50 backdrop-blur-md"
           } rounded-full px-6 ${isLightMode ? "border" : ""}`}
         >
           <div className="flex items-center justify-between h-16">
@@ -117,21 +181,28 @@ export default function Navbar() {
               </div>
             </div>
 
+            {/* Update the desktop navigation items rendering to use desktopNavItems */}
             <div className="flex items-center space-x-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`transition-colors duration-200 text-sm font-medium ${
-                    isLightMode ? "text-gray-700 hover:text-signature-gold" : "text-gray-300 hover:text-signature-gold"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-
-              {/* Desktop Install Button */}
-              <PWAInstallButton variant="desktop" />
+              {desktopNavItems.map((item) => {
+                const isActive = pathname.startsWith(item.href)
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`transition-colors duration-200 text-sm font-medium relative ${
+                      isActive
+                        ? isLightMode
+                          ? "text-signature-gold font-semibold"
+                          : "text-signature-gold font-semibold"
+                        : isLightMode
+                          ? "text-gray-700 hover:text-signature-gold"
+                          : "text-gray-300 hover:text-signature-gold"
+                    } ${isActive ? "after:content-[''] after:absolute after:bottom-[-6px] after:left-0 after:w-full after:h-[2px] after:bg-signature-gold" : ""}`}
+                  >
+                    {item.name}
+                  </Link>
+                )
+              })}
 
               <Link
                 href="/login"
@@ -163,9 +234,6 @@ export default function Navbar() {
             Signature
           </span>
         </Link>
-
-        {/* Mobile Install Button */}
-        <PWAInstallButton variant="mobile" />
       </div>
 
       {/* Mobile bottom navigation - app style with centered logo */}
@@ -180,31 +248,30 @@ export default function Navbar() {
           {/* Navigation items */}
           {navItems.map((item, index) => {
             const Icon = item.icon
-            const isActive = pathname.startsWith(item.href) || activeMenu === item.key
+            const isActive = pathname.startsWith(item.href)
 
             return (
-              <button
+              <Link
                 key={item.key}
-                onClick={() => handleMenuClick(item.key)}
+                href={item.href}
                 className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
                   isActive
-                    ? isLightMode
-                      ? "text-signature-gold"
-                      : "text-signature-gold"
+                    ? "text-signature-gold font-semibold"
                     : isLightMode
                       ? "text-gray-600 hover:text-gray-900"
                       : "text-gray-400 hover:text-white"
                 }`}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className={`h-5 w-5 ${isActive ? "fill-current" : ""}`} />
                 <span className="text-xs">{item.name}</span>
-              </button>
+                {isActive && <div className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-signature-gold"></div>}
+              </Link>
             )
           })}
         </div>
       </nav>
 
-      {/* Center logo as home button */}
+      {/* Keep the center logo as a home button */}
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[51] md:hidden">
         <Link
           href="/"
@@ -228,18 +295,18 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Login button for mobile - fixed to bottom right */}
-      <Link
-        href="/login"
+      {/* Add a floating action button for PWA installation */}
+      <button
+        onClick={handleInstallClick}
         className={`fixed bottom-20 right-4 z-50 p-3 rounded-full shadow-lg md:hidden transition-all duration-300 ${
           isLightMode
             ? "bg-signature-gold hover:bg-signature-gold/90 text-white"
             : "bg-signature-gold hover:bg-signature-gold/90 text-white"
         }`}
-        aria-label="Login"
+        aria-label="Install App"
       >
-        <User className="h-6 w-6" />
-      </Link>
+        <Download className="h-6 w-6" />
+      </button>
 
       {/* Menu popups for each navigation item */}
       {navItems.map((item) => (
